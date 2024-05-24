@@ -1,14 +1,26 @@
 ## Introduce
-Environmental perception system for underwater robots
-## Packages
+
+**UV_Carto** -- Underwater Robot SLAM Based on Multi beam Sonar and Cartographer Algorithm
+
+### version
+- only use m750d
+### TODO
+- integrating odometer information
+- using mechanical scanning sonar
+
+## ROS2 Packages
+
+### oculus_ros2 && oculus_driver
+the ROS2 driver for oculus m750d sonar, which depends on `oculus_interface`.
+
 ### mbs
-multibeam sonar packages
+multibeam sonar package, which processes with the oculus sonar data, depending on  `oculus_interface`.
 
 ### msis
-Mechanical scanning image sonar packages
+Mechanical scanning image sonar packages, including the ROS2 driver for Mechanical scanning image sonar(MSIS) STS1000, and data processing methods.
 
 ### rov_tf
-The TF relationship between frames
+The TF relationship between frames.
 
 ### uvbot_cartographer
 the launch and config file about cartographer slam for underwater vehicle 
@@ -24,4 +36,30 @@ git clone https://github.com/ros2/cartographer_ros.git -b ros2
 rosdepc update
 rosdepc install -r --from-paths src --ignore-src --rosdistro $ROS_DISTRO -y
 colcon build --packages-up-to cartographer_ros
+```
+
+
+## How to use
+#### Step1: start m750d
+```
+ros2 launch oculus_ros2 default.launch.py 
+```
+should set the param `is_running` true, then m750d start working, publishing the topic `/sonar/ping`
+
+#### Step2: publish TF
+```
+ros2 launch rov_tf rov_tf.launch.py 
+```
+
+#### Step3: process /sonar/ping
+
+```
+ros2 run mbs m750d_ping_to_pointcloud 
+```
+which subscribe `/sonar/ping`, process and publishs the topic `/points`
+
+
+#### Step4: start uv_cartographer
+```
+ros2 launch uvbot_cartographer cartographer.launch.py
 ```
