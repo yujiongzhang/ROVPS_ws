@@ -40,6 +40,8 @@ colcon build --packages-up-to cartographer_ros
 
 
 ## How to use
+can use this in step one by one, or using our launch file.
+### Step One by One
 #### Step1: start m750d
 ```
 ros2 launch oculus_ros2 default.launch.py 
@@ -62,4 +64,20 @@ which subscribe `/sonar/ping`, process and publishs the topic `/points`
 #### Step4: start uv_cartographer
 ```
 ros2 launch uvbot_cartographer cartographer.launch.py
+```
+
+### Launch
+#### online
+```
+ros2 launch uvbot_cartographer uvbot_cartographer_online.launch.py 
+```
+
+#### offline
+```
+ros2 launch uvbot_cartographer uvbot_cartographer_offline.launch.py 
+```
+and use the data in rosbag
+```
+source install/setup.bash
+ros2 bag play record/rosbag2_2024_05_17-15_37_22/rosbag2_2024_05_17-15_37_22_0.db3 
 ```

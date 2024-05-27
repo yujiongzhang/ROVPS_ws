@@ -11,7 +11,7 @@
     # 1: Low frequency (1.2MHz, wide aperture).
     # 2: High frequency (2.1MHz, narrow aperture).
 
-    ping_rate: 2 # Frequency of ping fires. Default value is 2.
+    ping_rate: 0 # Frequency of ping fires. Default value is 2.
     # 0: 10Hz max ping rate.
     # 1: 15Hz max ping rate.
     # 2: 40Hz max ping rate.
@@ -19,7 +19,7 @@
     # 4: 2Hz max ping rate.
     # 5: Standby mode (no ping fire).
 
-    nbeams: 1 # Number of ping beams. Default value is 1.
+    nbeams: 0 # Number of ping beams. Default value is 1.
     #  0: Oculus outputs 256 beams.
     #  1: Oculus outputs 512 beams.
 
