@@ -56,7 +56,7 @@ public:
         {
             for (int range_i = 0; range_i < n_ranges; range_i++)
             {
-                if (range_beam_map[range_i][beams_i]>100)
+                if (range_beam_map[range_i][beams_i]>120)
                 {
                     double angle = (float)bearings[beams_i]/18000.0 * M_PI;
                     double range = ((float)range_i / (float)n_ranges) * scanRange;
