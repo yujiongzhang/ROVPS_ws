@@ -81,3 +81,8 @@ and use the data in rosbag
 source install/setup.bash
 ros2 bag play record/rosbag2_2024_05_17-15_37_22/rosbag2_2024_05_17-15_37_22_0.db3 
 ```
+
+## Save Map
+```
+ros2 run nav2_map_server map_saver_cli -t map -f map_name
+```
