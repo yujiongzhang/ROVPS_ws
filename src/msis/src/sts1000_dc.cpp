@@ -35,10 +35,11 @@ private:
     ANSHEAD_STS1000 anshead;//机械扫描声纳帧头
     CMD_STS1000 cmd_sts1000;//下发的指令
 
-    float scanRange;
-    int startGain;
-    int diffusion;
-    bool is_running;
+    float scanRange;//成像半径
+    int startGain;//增益
+    int diffusion;//声扩散系数
+    int energy_threshold;//点云提取能量阈值
+    bool is_running;//是否启动
 
     int count;
 
@@ -58,6 +59,8 @@ public:
         this->get_parameter("startGain", startGain); /*获取参数*/
         this->declare_parameter<int>("diffusion", DIFFUSION);     /*声明参数*/
         this->get_parameter("diffusion", diffusion); /*获取参数*/
+        this->declare_parameter<int>("energy_threshold", ENERGYTHRESHOLD);     /*声明参数*/
+        this->get_parameter("energy_threshold", energy_threshold); /*获取参数*/
         on_set_parameters_callback_handle_ = this-> add_on_set_parameters_callback(std::bind(&sts1000_dc::setConfigCallback, this,std::placeholders::_1));
 
         memset(&cmd_sts1000,0,sizeof(cmd_sts1000));
@@ -79,16 +82,16 @@ public:
         inet_pton(AF_INET, "192.168.1.7", &seraddr.sin_addr.s_addr);
 
         
-        cliaddr.sin_family = AF_INET;
-        cliaddr.sin_addr.s_addr = INADDR_ANY;
-        cliaddr.sin_port = htons(6666);
-        // inet_pton(AF_INET, "127.0.0.1", &seraddr.sin_addr.s_addr);
-        int ret = bind(fd, (struct sockaddr*)&cliaddr, sizeof(cliaddr));//客户端可以绑定为固定端口也可以不
-        if(ret == -1)
-        {
-            perror("bind");
-            exit(0);
-        }
+        // cliaddr.sin_family = AF_INET;
+        // cliaddr.sin_addr.s_addr = INADDR_ANY;
+        // cliaddr.sin_port = htons(6666);
+        // // inet_pton(AF_INET, "127.0.0.1", &seraddr.sin_addr.s_addr);
+        // int ret = bind(fd, (struct sockaddr*)&cliaddr, sizeof(cliaddr));//客户端可以绑定为固定端口也可以不
+        // if(ret == -1)
+        // {
+        //     perror("bind");
+        //     exit(0);
+        // }
 
         // 设置非阻塞
         int flags = fcntl(fd, F_GETFL, 0);
@@ -154,7 +157,7 @@ public:
                     sts1000_ping.ranges.push_back( range_resolution*(1+i));
                     sts1000_ping.intensities.push_back(buf[ sizeof(ANSHEAD_STS1000)+ i]);
 
-                    if(buf[ sizeof(ANSHEAD_STS1000)+ i] > 100){//满足点云提取要求
+                    if(buf[ sizeof(ANSHEAD_STS1000)+ i] > energy_threshold){//满足点云提取要求
                         double px = cos(angle) * sts1000_ping.ranges[i];
                         double py = sin(angle) * sts1000_ping.ranges[i];
                         scan_map.push_back(std::pair<double, double>(px, py));
@@ -286,12 +289,20 @@ public:
                 updateCheckSum(&cmd_sts1000);
                 RCLCPP_INFO(this->get_logger(), "diffusion is %d",this->diffusion);
             }
-            
+            else if (param.get_name() == "energy_threshold") {
+                if( param.as_int() < 0 || param.as_int() > 8)
+                {
+                    RCLCPP_INFO(this->get_logger(), "energy_threshold must be 0~255!");
+                    result.successful = false;
+                    result.reason = "energy_threshold must be 0~255!";
+                    return result;
+                }
+                this->energy_threshold = param.as_int();
+                RCLCPP_INFO(this->get_logger(), "energy_threshold is %d",this->energy_threshold);
+            }
         }
-
         return result;
     }
-
 };
 
 

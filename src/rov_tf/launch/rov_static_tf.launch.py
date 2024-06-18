@@ -27,13 +27,9 @@ def generate_launch_description():
             executable='static_transform_publisher',
             arguments=['0', '0', '0.1', '0', '0', '0', 'base_link', 'sts1000']
     )
-    rov_bringup = Node(
-        package="rov_tf",
-        executable="rov_bringup",
-        remappings=[('/odom', '/YellowBot/odometry/filtered')]
-    )
+
     # 创建LaunchDescription对象launch_description,用于描述launch文件
     launch_description = LaunchDescription(
-        [rov_tf_publisher_01, rov_tf_publisher_02,rov_tf_publisher_03, rov_bringup])
+        [rov_tf_publisher_01, rov_tf_publisher_02,rov_tf_publisher_03])
     # 返回让ROS2根据launch描述执行节点
     return launch_description

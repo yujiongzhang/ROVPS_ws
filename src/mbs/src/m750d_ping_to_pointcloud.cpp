@@ -2,6 +2,7 @@
 
 #include "sensor_msgs/msg/image.hpp"
 #include "sensor_msgs/msg/point_cloud2.hpp"
+#include "sensor_msgs/msg/laser_scan.hpp"
 
 #include "oculus_interfaces/msg/ping.hpp"
 
@@ -19,6 +20,7 @@ private:
     // 声明
     rclcpp::Subscription<oculus_interfaces::msg::Ping>::SharedPtr m750d_ping_subscribe_;
     rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr m750d_pointcloud_publisher_;
+    rclcpp::Publisher<sensor_msgs::msg::LaserScan>::SharedPtr m750d_laserscan_publisher_;
 
 public:
     // 构造函数,有一个参数为节点名称
@@ -28,8 +30,8 @@ public:
 
         m750d_ping_subscribe_ = this->create_subscription<oculus_interfaces::msg::Ping>("/sonar/ping", 10, \
                                     std::bind(&m750d_ping2pc::m750d_ping_callback, this, std::placeholders::_1));
-        m750d_pointcloud_publisher_ =  this->create_publisher<sensor_msgs::msg::PointCloud2>("points2", 10);
-
+        m750d_pointcloud_publisher_ =  this->create_publisher<sensor_msgs::msg::PointCloud2>("/points2", 10); 
+        m750d_laserscan_publisher_ = this->create_publisher<sensor_msgs::msg::LaserScan>("/m750d/scan", 10);
     }
 
     // 收到 m750d ping 的回调函数
@@ -52,6 +54,10 @@ public:
         }
 
         std::vector<std::pair<double, double>> points_map;//存储符合要求的点的map
+        // std::vector<double> scan_vector;
+        // float m_angle_min = (float)bearings[0]/18000.0 * M_PI;
+        // float m_angle_max = (float)bearings[n_beams-1]/18000.0 * M_PI;
+
         for (int beams_i = 0; beams_i < n_beams; beams_i++)
         {
             for (int range_i = 0; range_i < n_ranges; range_i++)
@@ -66,6 +72,7 @@ public:
                     points_map.push_back(std::pair<double, double>(px, py));
                 }
             }
+
         }
 
         sensor_msgs::msg::PointCloud2 pc2_msg;
@@ -108,6 +115,22 @@ public:
         }
 
         m750d_pointcloud_publisher_->publish(pc2_msg);
+
+        // sensor_msgs::msg::LaserScan scan_msg;
+        // scan_msg.header = pc2_msg.header;
+        // scan_msg.angle_min = m_angle_min;
+        // scan_msg.angle_max = m_angle_max;
+        // scan_msg.angle_increment = (m_angle_max - m_angle_min) / n_beams; // 1 degree resolution
+        // scan_msg.time_increment = 0.0;
+        // scan_msg.scan_time = 0.0;
+        // scan_msg.range_min = 0.0;
+        // scan_msg.range_max = 20.0;
+        // scan_msg.ranges.resize(n_beams); // n_beams degrees
+        // // Populate ranges with dummy data
+        // for (size_t i = 0; i < scan_msg.ranges.size(); ++i)
+        // {
+        //     scan_msg.ranges[i] = scan_vector[i]; // Dummy value
+        // }
 
         RCLCPP_INFO(this->get_logger(), "beams: %d ,step: %d",n_beams, n_step);
         RCLCPP_INFO(this->get_logger(), "scanRange: %f",scanRange);

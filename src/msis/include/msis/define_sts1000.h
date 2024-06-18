@@ -12,6 +12,7 @@
 #define SCANRANGE 10.0 //扫描范围
 #define STARTGAIN 20 //
 #define DIFFUSION 5 //
+#define ENERGYTHRESHOLD 100 //点云提取能量阈值
 
 
 //*******************命令包******************************

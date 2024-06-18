@@ -20,7 +20,7 @@ options = {
   -- false改为true，仅发布2D位资
   publish_frame_projected_to_2d = true,
   -- false改为true，使用里程计数据
-  use_odometry = false,
+  use_odometry = true,
   use_nav_sat = false,
   use_landmarks = false,
   -- 0改为1,使用一个雷达
@@ -56,7 +56,6 @@ options = {
 MAP_BUILDER.use_trajectory_builder_2d = true
 
 
-
 -- 0改成0.10,比机器人半径小的都忽略
 -- TRAJECTORY_BUILDER_2D.min_range = 0.10
 TRAJECTORY_BUILDER_2D.min_range = 0.5
@@ -73,7 +72,7 @@ TRAJECTORY_BUILDER_2D.use_online_correlative_scan_matching = true
 -- 1.0改成0.1,提高对运动的敏感度
 TRAJECTORY_BUILDER_2D.motion_filter.max_angle_radians = math.rad(0.1)
 -- 几帧有效的点云数据进行一次扫描匹配 然后再把100个点云消息拼接起来（做运动补偿），作为当前帧输
-TRAJECTORY_BUILDER_2D.num_accumulated_range_data = 1
+TRAJECTORY_BUILDER_2D.num_accumulated_range_data = 200
 
 
 TRAJECTORY_BUILDER_2D.submaps.grid_options_2d.resolution = 0.1
