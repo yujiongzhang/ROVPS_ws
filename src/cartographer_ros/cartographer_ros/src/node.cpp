@@ -210,6 +210,20 @@ bool Node::handleTrajectoryQuery(
     return true;
   }
   map_builder_bridge_->HandleTrajectoryQuery(request, response);
+
+  // 保存轨迹为txt文件
+  std::cout << "receiving" << std::endl;
+  std::string txt_filename = "/home/zyj/trajectory.txt";
+  std::ofstream outf(txt_filename, std::ios::app);
+  for (int i = 0; i < response->trajectory.size(); i++){
+    int32_t sec = response->trajectory[i].header.stamp.sec;
+    int32_t nsec = response->trajectory[i].header.stamp.nanosec;
+    double x = response->trajectory[i].pose.position.x;
+    double y = response->trajectory[i].pose.position.y;
+    double z = response->trajectory[i].pose.position.z;
+    outf << std::setprecision(20) << sec << "." << nsec << " " << x << " " << y << " " << z << std::endl;
+  }
+
   return true;
 }
 

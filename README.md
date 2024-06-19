@@ -16,9 +16,8 @@ the ROS2 driver for oculus m750d sonar, which depends on `oculus_interface`.
 ### mbs
 multibeam sonar package, which processes with the oculus sonar data, depending on  `oculus_interface`.
 
-m750d_ping_to_pointcloud: /Ping to /PointCloud2
-
-pointcloud2scan.launch.py: /PointCloud2 to /LaserScan
+- m750d_ping_to_pointcloud: /Ping to /PointCloud2
+- pointcloud2scan.launch.py: /PointCloud2 to /LaserScan
 
 ### msis
 Mechanical scanning image sonar packages, including the ROS2 driver for Mechanical scanning image sonar(MSIS) STS1000, and data processing methods.
@@ -42,6 +41,9 @@ rosdepc install -r --from-paths src --ignore-src --rosdistro $ROS_DISTRO -y
 colcon build --packages-up-to cartographer_ros
 ```
 
+- **cartographer.launch.py** subscribe `points2`
+- **cartographer_scan.launch.py** subscribe `/sonar/scan`
+- **cartographer_msis.launch.py** subscribe `/YellowBot/odometry/filtered` and `/sts1000_raw_points`
 
 ## How to use (m750d slam)
 can use this in step one by one, or using our launch file.
@@ -108,3 +110,4 @@ ros2 launch rov_tf rov_tf.launch.py
 ```
 ros2 launch uvbot_cartographer cartographer_msis.launch.py
 ```
+
