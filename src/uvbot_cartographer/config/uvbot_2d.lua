@@ -12,11 +12,12 @@ options = {
   -- 如果使用雷达数据+IMU进行2D或者3D建图，因为IMU的发布频率明显高于雷达，所以需要设置为imu数据话题的frame_id，一般imu_link
   tracking_frame = "base_footprint",
   -- base_link改为odom,发布map到odom之间的位姿态
-  published_frame = "odom",
+  -- published_frame = "odom",
+  published_frame = "base_footprint",
   -- 不见得启用，只有在下一个选项provide_odom_frame为true时才启用，这个一般被设为odom，也是里程计的坐标系的名称。
   odom_frame = "odom",
-  -- true改为false，不odom_frame
-  provide_odom_frame = false,
+  -- Cartographer 会创建一个 odom 到 base_link（或其他 published_frame）的变换，并持续更新这个变换。
+  provide_odom_frame = true,
   -- false改为true，仅发布2D位资
   publish_frame_projected_to_2d = true,
   -- false改为true，使用里程计数据
