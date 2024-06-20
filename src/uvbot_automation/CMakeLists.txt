@@ -11,12 +11,25 @@ find_package(rclcpp REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
 add_executable(demo src/demo.cpp)
 ament_target_dependencies(demo rclcpp tf2_ros tf2_geometry_msgs geometry_msgs)
+
+add_executable(carto_odometer src/carto_odometer.cpp)
+ament_target_dependencies(carto_odometer rclcpp tf2_ros tf2_geometry_msgs geometry_msgs nav_msgs)
+
+add_executable(carto_odometer2 src/carto_odometer2.cpp)
+ament_target_dependencies(carto_odometer2 rclcpp tf2_ros tf2_geometry_msgs geometry_msgs nav_msgs)
+
+add_executable(carto_odometer_speed src/carto_odometer_speed.cpp)
+ament_target_dependencies(carto_odometer_speed rclcpp tf2_ros tf2_geometry_msgs geometry_msgs nav_msgs)
+
+add_executable(cmdTransmit src/cmdTransmit.cpp)
+ament_target_dependencies(cmdTransmit rclcpp tf2_ros tf2_geometry_msgs geometry_msgs nav_msgs)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -32,6 +45,10 @@ endif()
 
 install(TARGETS
   demo
+  carto_odometer
+  carto_odometer2
+  carto_odometer_speed
+  cmdTransmit
   DESTINATION lib/${PROJECT_NAME}
 )
 
