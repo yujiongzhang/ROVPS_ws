@@ -25,8 +25,12 @@ public:
 
 
         dvl_msg.twist.covariance.fill(0.0); // 对应6x6的协方差矩阵
-
-
+        dvl_msg.twist.covariance[6*0 + 0] =  1e-6;
+        dvl_msg.twist.covariance[6*1 + 1] =  1e-6;
+        dvl_msg.twist.covariance[6*2 + 2] =  1e-6;// 0.1 * 0.1;
+        dvl_msg.twist.covariance[6*3 + 3] =  1e6;
+        dvl_msg.twist.covariance[6*4 + 4] =  1e6;
+        dvl_msg.twist.covariance[6*5 + 5] =  1e6;
     }
 
     // 收到 m750d ping 的回调函数

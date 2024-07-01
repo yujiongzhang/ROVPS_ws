@@ -11,6 +11,7 @@ find_package(rclcpp REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 find_package(cirs_girona_cala_viuda REQUIRED)
 
 
@@ -36,17 +37,35 @@ endif()
 
 
 add_executable(dvl_process src/dvl_process.cpp)
-ament_target_dependencies(
-  dvl_process 
+ament_target_dependencies( dvl_process 
   rclcpp
   geometry_msgs
   cirs_girona_cala_viuda
 )
 
+add_executable(depth_process src/depth_process.cpp)
+ament_target_dependencies( depth_process 
+  rclcpp
+  geometry_msgs
+  cirs_girona_cala_viuda
+)
+
+add_executable(adis_imu_process src/adis_imu_process.cpp)
+ament_target_dependencies( adis_imu_process 
+  rclcpp
+  sensor_msgs
+)
+
 install(TARGETS
   dvl_process
+  depth_process
+  adis_imu_process
   DESTINATION lib/${PROJECT_NAME}
 )
 
+install(DIRECTORY 
+  launch
+  DESTINATION share/${PROJECT_NAME}
+)
 
 ament_package()
