@@ -23,7 +23,6 @@ public:
                                     std::bind(&dvl_process::LinkquestDvl_callback, this, std::placeholders::_1));
         dvl_publisher_ =  this->create_publisher<geometry_msgs::msg::TwistWithCovarianceStamped>("dvl2", 10);
 
-
         dvl_msg.twist.covariance.fill(0.0); // 对应6x6的协方差矩阵
         dvl_msg.twist.covariance[6*0 + 0] =  1e-6;
         dvl_msg.twist.covariance[6*1 + 1] =  1e-6;
@@ -40,6 +39,7 @@ public:
 
         if(msg->velocity_earth_flag == 1){
             dvl_msg.header = msg->header;
+            // dvl_msg.header.frame_id = "world";
             dvl_msg.twist.twist.linear.x = msg->velocity_earth[0];
             dvl_msg.twist.twist.linear.y = msg->velocity_earth[1];
             dvl_msg.twist.twist.linear.z = msg->velocity_earth[2];

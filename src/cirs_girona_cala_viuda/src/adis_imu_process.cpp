@@ -29,9 +29,9 @@ public:
         RCLCPP_INFO(this->get_logger(), "imu_adis_ros has received");
         sensor_msgs::msg::Imu temp = *msg;
         temp.orientation_covariance.fill(0.0);
-        temp.orientation_covariance[0*3+0] = 1e-4;
-        temp.orientation_covariance[1*3+1] = 1e-4;
-        temp.orientation_covariance[2*3+2] = 1e-4;
+        temp.orientation_covariance[0*3+0] = 1e-6;
+        temp.orientation_covariance[1*3+1] = 1e-6;
+        temp.orientation_covariance[2*3+2] = 1e-6;
         temp.angular_velocity_covariance.fill(0.0);
         temp.angular_velocity_covariance[0*3+0] = 1e-6;
         temp.angular_velocity_covariance[1*3+1] = 1e-6;

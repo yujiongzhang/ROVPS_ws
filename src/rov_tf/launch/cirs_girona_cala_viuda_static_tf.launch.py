@@ -15,18 +15,20 @@ def generate_launch_description():
     rov_tf_publisher_01 = Node(
             package='tf2_ros',
             executable='static_transform_publisher',
-            arguments=['0', '0', '0.076', '0', '0', '0', 'base_footprint', 'base_link']
+            arguments=['-0.38', '0', '0.076', '0.70710678', '0.70710678', '0', '0', 'sparus', 'imu_adis']
     )
     rov_tf_publisher_02 = Node(
             package='tf2_ros',
             executable='static_transform_publisher',
-            arguments=['0', '0', '0.075', '0', '0', '0', 'base_link', 'laser_link']
+            arguments=['0.55', '0', '-0.15', '-0.70710678', '0', '0.70710678', '0','sparus', 'depth_sensor']
     )
     rov_tf_publisher_03 = Node(
             package='tf2_ros',
             executable='static_transform_publisher',
-            arguments=['0', '0', '0.1', '0', '0', '0', 'base_link', 'sts1000']
+            arguments=['0', '0', '0', '0', '0', '0', 'sparus', 'dvl_linkquest']
     )
+
+
     # 创建LaunchDescription对象launch_description,用于描述launch文件
     launch_description = LaunchDescription(
         [rov_tf_publisher_01, rov_tf_publisher_02,rov_tf_publisher_03])

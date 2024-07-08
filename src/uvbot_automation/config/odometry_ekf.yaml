@@ -5,6 +5,8 @@ YellowBot:
     # 滤波器输出位置估计的频率，单位为Hz。请注意，过滤器在从其中一个输入接收到至少一条消息之前不会开始计算。
     # 然后，无论是否接收到更多的测量值，它都将以此处指定的频率连续运行。如果未指定，则默认为30。        
             frequency: 30.0
+            use_sim_time: true
+            initial_state: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 , 0.0, 0.0, 0.0]
     
     # 我们认为传感器超时的时间段（以秒为单位）。在这种情况下，我们在EKF上执行一个预测周期，而不进行校正。
     # 这个参数可以被认为是滤波器产生新输出的最小频率。如果未指定，则默认为1/频率。
@@ -14,7 +16,7 @@ YellowBot:
     # 如果此参数设置为true，则不会在状态估计中使用任何三维信息。
     # 如果您在平面环境中操作，并且希望忽略地平面中可能检测到的微小变化的影响，请使用此选项
     # 例如通过IMU。如果未指定，则默认为false。 
-            two_d_mode: true
+            two_d_mode: false
     
     
     # 使用此参数可以为ekf_location_node生成的变换提供偏移。这可以用于未来的日期转换，这是与其他一些包交互所必需的。
@@ -34,18 +36,15 @@ YellowBot:
     # 调试设置。不适合胆小的人。向debug_out_file指定的文件输出数量惊人的信息。我希望你喜欢矩阵！
     # 请注意，将此设置为true将对节点的性能产生严重的有害影响。如果未指定，则默认为false。
             debug: false
-    
     #如果未指定，则默认为“robot_location_debug.txt”。请指定完整路径。
             debug_out_file: /path/to/debug/file.txt
-    
+
     # 我们是否允许旧的测量结果导致更新状态的重新发布
             permit_corrected_publication: false
-    
     #是否发布加速状态。如果未指定，则默认为false。
             publish_acceleration: false
-    
     #是否在/tf主题上广播转换。如果未指定，则默认为true。
-            publish_tf: false
+            publish_tf: true
     
     
     # REP-105(http://www.ros.org/reps/rep-0105.html)指定四个主要坐标系：base_link、odom、map和earth。
@@ -80,7 +79,7 @@ YellowBot:
     # 每个传感器读数都会更新过滤器的部分或全部状态。这些选项使您能够更好地控制将每个测量值输入到过滤器的值。
     # 例如，如果您有里程计消息作为输入，但只想使用其Z位置值，则将整个矢量设置为false，第三个条目除外。
     # 值的顺序为x、y、z、roll、pitch、yaw、vx、vy、vz、vroll、vpitch、vyaw、ax、ay、az。
-    # 请注意，并非某些消息类型不提供过滤器估计的某些状态变量。例如，TwistWithCovarianceStamped消息没有姿势信息，
+    # 请注意，并非某些消息类型不提供过滤器估计的某些状态变量。例如，TwistWithCovarianceStamped消息没有位姿信息，
     # 因此在这种情况下，前六个值将毫无意义。如果未指定，则每个向量默认为全假，从而有效地使每个传感器都需要此参数。
         #     twist0_config: [false, false, false, #x-y-z坐标系的坐标（机器人位置）
         #                 false, false, false, #绕x/y/z轴的角度（机器人方向）、
@@ -158,21 +157,21 @@ YellowBot:
             twist0_nodelay: false
             twist0_differential: false
             twist0_relative: false
-            twist0_rejection_threshold: 2.0
+        #     twist0_rejection_threshold: 2.0
     
             imu0: /adis_imu_covariance
             imu0_config: [false, false, false,   #x-y-z坐标系的坐标（机器人位置）
                             true, true, true,  #绕x/y/z轴的角度（机器人方向）
                             false, false, false,   #沿x/y/z轴的线速度
-                            true,  true,  true,     #绕x/y/z轴的角速度
-                            true, true, true]    #沿x/y/z轴的加速度              
+                            false,  false,  false,     #绕x/y/z轴的角速度
+                            false, false, false]    #沿x/y/z轴的加速度              
             imu0_nodelay: false
             imu0_differential: false
             imu0_relative: false
             imu0_queue_size: 20
-            imu0_pose_rejection_threshold: 0.8                 # 注意参数名称的差异
-            imu0_twist_rejection_threshold: 0.8                #
-            imu0_linear_acceleration_rejection_threshold: 0.8  #
+        #     imu0_pose_rejection_threshold: 0.8                 # 注意参数名称的差异
+        #     imu0_twist_rejection_threshold: 0.8                #
+        #     imu0_linear_acceleration_rejection_threshold: 0.8  #
     # [高级]一些IMU会自动消除重力造成的加速度，而另一些则不会。如果您的数据不符合，请将其设置为true，
     # 并*确保*您的数据符合REP-103，特别是数据在ENU框架中。
             imu0_remove_gravitational_acceleration: false
@@ -187,6 +186,7 @@ YellowBot:
             pose0_relative: false
             pose0_queue_size: 10
             pose0_nodelay: false
+
             #若开启UGPS，请取消下面的注释
         #     pose1: pose_z
         #     pose1_config: [true,  true,  false,

@@ -37,6 +37,7 @@ public:
     {
         RCLCPP_INFO(this->get_logger(), "Depth has received");
         depth_msg.header = msg->header;
+        depth_msg.header.frame_id = "world";
         depth_msg.pose.pose.position.z = msg->depth;
         depth_publisher_->publish(depth_msg);
     }
