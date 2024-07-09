@@ -1,54 +1,62 @@
-import rosbag2_py
 import csv
 import os
-import importlib
+import rclpy
+from rosbag2_py import SequentialReader, StorageOptions, ConverterOptions
+from rclpy.serialization import deserialize_message
+from rosidl_runtime_py.utilities import get_message
 
-def export_bag_to_csv(bag_path, output_dir):
-    reader = rosbag2_py.SequentialReader()
-    storage_options = rosbag2_py.StorageOptions(uri=bag_path, storage_id='sqlite3')
-    converter_options = rosbag2_py.ConverterOptions(input_serialization_format='cdr', output_serialization_format='cdr')
+def read_bag_to_csv(bag_path, csv_path, topics):
+    # 初始化ROS 2节点
+    rclpy.init()
+    
+    # 配置读取选项
+    storage_options = StorageOptions(uri=bag_path, storage_id='sqlite3')
+    converter_options = ConverterOptions(input_serialization_format='cdr', output_serialization_format='cdr')
+    
+    reader = SequentialReader()
     reader.open(storage_options, converter_options)
     
-    topics = reader.get_all_topics_and_types()
-    topic_type_map = {topic.name: topic.type for topic in topics}
+    # 获取所有话题和类型
+    topic_types = {topic.name: topic.type for topic in reader.get_all_topics_and_types()}
     
-    os.makedirs(output_dir, exist_ok=True)
+    # 确保输出目录存在
+    os.makedirs(os.path.dirname(csv_path), exist_ok=True)
     
-    while reader.has_next():
-        (topic, data, t) = reader.read_next()
+    # 打开CSV文件准备写入
+    with open(csv_path, mode='w', newline='') as csv_file:
+        csv_writer = csv.writer(csv_file)
         
-        msg_type_str = topic_type_map[topic].split('/')
-        if len(msg_type_str) != 2:
-            print(f"Skipping topic with type: {topic_type_map[topic]}")
-            continue
+        # 写入CSV表头
+        csv_writer.writerow(['timestamp', 'linear_acceleration_x', 'linear_acceleration_y', 'linear_acceleration_z', 'angular_velocity_x', 'angular_velocity_y', 'angular_velocity_z'])
         
-        # Dynamically import the message type module
-        try:
-            msg_module = importlib.import_module(f'{msg_type_str[0]}.msg')
-            msg_class = getattr(msg_module, msg_type_str[1])
-        except (ImportError, AttributeError) as e:
-            print(f"Error importing {msg_type_str[0]}.msg.{msg_type_str[1]}: {e}")
-            continue
-        
-        # Deserialize the message data
-        try:
-            msg = msg_class()
-            msg.deserialize(data)
-        except Exception as e:
-            print(f"Error deserializing message on topic {topic}: {e}")
-            continue
-        
-        csv_file = os.path.join(output_dir, f"{topic.replace('/', '_')}.csv")
-        with open(csv_file, 'a', newline='') as f:
-            writer = csv.writer(f)
-            if f.tell() == 0:
-                # Write header
-                writer.writerow(msg.__slots__)
-            # Write message data
-            writer.writerow([getattr(msg, slot) for slot in msg.__slots__])
-        print(f"Exported message on topic {topic}")
+        while reader.has_next():
+            (topic, data, t) = reader.read_next()
+            
+            # 检查是否是我们感兴趣的话题
+            if topic in topics:
+                # 将数据转换为适当的格式
+                message = deserialize_message(data, get_message(topic_types[topic]))
+                
+                # 根据消息类型提取数据
+                if topic == '/YellowBot/imu':
+                    row = [
+                        t,
+                        message.linear_acceleration.x,
+                        message.linear_acceleration.y,
+                        message.linear_acceleration.z,
+                        message.angular_velocity.x,
+                        message.angular_velocity.y,
+                        message.angular_velocity.z
+                    ]
+                    csv_writer.writerow(row)
+    
+    # 关闭ROS 2节点
+    rclpy.shutdown()
 
 if __name__ == '__main__':
     bag_path = '/home/zyj/Documents/GitHub/ROVPS_ws/record/Carto_1'  # Replace with your bag file path
     output_dir = '/home/zyj/Documents/GitHub/ROVPS_ws/script/Carto_1'  # Replace with your desired output directory
-    export_bag_to_csv(bag_path, output_dir)
+    csv_path = os.path.join(output_dir, 'output.csv')
+    topics = ['/YellowBot/imu']
+    
+    read_bag_to_csv(bag_path, csv_path, topics)
