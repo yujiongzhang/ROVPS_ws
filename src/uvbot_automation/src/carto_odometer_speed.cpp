@@ -68,7 +68,6 @@ private:
                     odom_msg.pose.covariance[i * 6 + i] = position_covariance;  // 对角线位置协方差
                     odom_msg.twist.covariance[i * 6 + i] = velocity_covariance; // 对角线速度协方差
                 }
-
                 odom_pub_->publish(odom_msg);
             }
 

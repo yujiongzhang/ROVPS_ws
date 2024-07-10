@@ -15,7 +15,7 @@ options = {
   published_frame = "base_footprint",
   -- 不见得启用，只有在下一个选项provide_odom_frame为true时才启用，这个一般被设为odom，也是里程计的坐标系的名称。
   odom_frame = "odom",
-  -- true改为false，不odom_frame
+  -- 用来指定是否由 Cartographer 来提供里程计坐标系。如果您没有其他外部设备或系统提供里程计数据，设置为 `true`；如果您已有里程计系统，设置为 `false`
   provide_odom_frame = true,
   -- false改为true，仅发布2D位资
   publish_frame_projected_to_2d = true,
@@ -56,7 +56,6 @@ options = {
 MAP_BUILDER.use_trajectory_builder_2d = true
 
 
-
 -- 0改成0.10,比机器人半径小的都忽略
 -- TRAJECTORY_BUILDER_2D.min_range = 0.10
 TRAJECTORY_BUILDER_2D.min_range = 0.5
@@ -77,7 +76,6 @@ TRAJECTORY_BUILDER_2D.num_accumulated_range_data = 1
 
 
 TRAJECTORY_BUILDER_2D.submaps.grid_options_2d.resolution = 0.1
-
 
 
 -- 0.55改成0.65,Fast csm的最低分数，高于此分数才进行优化。

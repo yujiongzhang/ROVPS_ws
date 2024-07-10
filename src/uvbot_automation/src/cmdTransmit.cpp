@@ -24,7 +24,7 @@ private:
     RCLCPP_INFO(this->get_logger(), "Transmit cmd_vel message");
     geometry_msgs::msg::Twist new_msg;
     new_msg = *msg;
-    new_msg.angular.x = new_msg.angular.x * 0.2;
+    new_msg.angular.x = new_msg.angular.x * 0.2; // 减小转动时的灵敏度
     new_msg.angular.y = new_msg.angular.y * 0.2;
     new_msg.angular.z = new_msg.angular.z * 0.2;
     publisher_->publish(new_msg);
