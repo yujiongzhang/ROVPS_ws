@@ -43,10 +43,14 @@ add_executable(sts1000_process src/sts1000_process.cpp src/user_math_lib.cpp src
 ament_target_dependencies(sts1000_process rclcpp sensor_msgs geometry_msgs cv_bridge)
 target_link_libraries(sts1000_process ${OpenCV_LIBS} )
 
+add_executable(sts1000_ping_to_pointcloud src/sts1000_ping_to_pointcloud.cpp )
+ament_target_dependencies(sts1000_ping_to_pointcloud rclcpp sensor_msgs geometry_msgs)
+
 install(TARGETS
   test_node
   sts1000_dc
   sts1000_process
+  sts1000_ping_to_pointcloud
   DESTINATION lib/${PROJECT_NAME}
 )
 

@@ -48,8 +48,8 @@ public:
     sts1000_dc(std::string name) : Node(name){
         RCLCPP_INFO(this->get_logger(), "%s节点已经启动.", name.c_str());
         // 创建发布者
-        sts1000_raw_publisher_ = this->create_publisher<sensor_msgs::msg::LaserScan>("sts1000_raw", 10);
-        sts1000_pointcloud_publisher_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("sts1000_raw_points", 10);
+        sts1000_raw_publisher_ = this->create_publisher<sensor_msgs::msg::LaserScan>("/sts1000/ping", 10);
+        sts1000_pointcloud_publisher_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("/sts1000/raw_points", 10);
         
         this->declare_parameter<bool>("is_running", false);     /*声明参数*/
         this->get_parameter("is_running", is_running); /*获取参数*/
