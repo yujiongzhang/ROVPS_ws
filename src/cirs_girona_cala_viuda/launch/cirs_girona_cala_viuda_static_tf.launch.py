@@ -27,10 +27,20 @@ def generate_launch_description():
             executable='static_transform_publisher',
             arguments=['0', '0', '0', '0', '0', '0', 'sparus', 'dvl_linkquest']
     )
+    rov_tf_publisher_04 = Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            arguments=['0.55', '0', '-0.15', '-0.70710678', '0', '0.70710678', '0','sparus', 'sonar_seaking']
+    )
 
+    rov_tf_publisher_05 = Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            arguments=['0.1', '0', '-0.42', '0', '0', '1.0', '0','sparus', 'sonar_micron']
+    )
 
     # 创建LaunchDescription对象launch_description,用于描述launch文件
     launch_description = LaunchDescription(
-        [rov_tf_publisher_01, rov_tf_publisher_02,rov_tf_publisher_03])
+        [rov_tf_publisher_01, rov_tf_publisher_02,rov_tf_publisher_03,rov_tf_publisher_04,rov_tf_publisher_05])
     # 返回让ROS2根据launch描述执行节点
     return launch_description

@@ -28,6 +28,8 @@ ros2 launch uvbot_cartographer cartographer_scab.launch.py
 #### Step5: start navigation
 ```
 ros2 launch nav2_bringup navigation_launch.py
+```
+and transmit `/cmd_vel` to `/YellowBot/thruster/cmd_vel`
+```
 ros2 run uvbot_automation cmdTransmit 
 ```
-transmit `/cmd_vel` to `/YellowBot/thruster/cmd_vel`

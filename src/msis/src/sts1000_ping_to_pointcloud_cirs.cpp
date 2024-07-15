@@ -15,6 +15,7 @@ private:
     rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr sts1000_pointcloud_publisher_;
 
     std::pair<double, double> last_point;
+    const double energy_threshold = 55;
 
 public:
     // 构造函数,有一个参数为节点名称
@@ -36,7 +37,9 @@ public:
         // const int n_beams = msg->n_beams;
         int n_ranges = (msg->intensities).size();
         double angle = msg->angle_min;
-
+        if(angle < 0.7 || angle > 5.759586){
+            return;
+        }
 
         double resolution = (msg->range_max)/ static_cast<float>(n_ranges);
         RCLCPP_INFO(this->get_logger(), "n_ranges: %d ,angle: %f",n_ranges, angle);
@@ -47,9 +50,10 @@ public:
 
         for (int range_i = 0; range_i < n_ranges; range_i++)
         {
-            if ((msg->intensities)[range_i]>60) // 能量阈值设置
+            if ((msg->intensities)[range_i] > energy_threshold) // 能量阈值设置
             {
                 double range = (msg->ranges)[range_i];
+
                 if ( range > 1.0)
                 {
                     double px = cos(angle) * range;
