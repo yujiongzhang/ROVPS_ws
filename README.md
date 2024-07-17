@@ -1,12 +1,20 @@
+
+# Environmental Perception Technology for UUV in Muddy Waters
+
 ## Introduce
+Perception technology includes **UV_Carto**(multi-sensor fusion SLAM technology based on sonar images)
 
 **UV_Carto** -- Underwater Robot SLAM Based on Multi beam Sonar and Cartographer Algorithm
 
 ### version
 - only use m750d
+- use ekf
+- use ekf + m750d
+- use ekf + msis
+
 ### TODO
-- integrating odometer information
-- using mechanical scanning sonar
+- add simulation results in these 4 methods
+- the experimental results of the water tank
 
 ## ROS2 Packages
 
@@ -25,7 +33,7 @@ Mechanical scanning image sonar packages, including the ROS2 driver for Mechanic
 ### rov_tf
 The TF relationship between frames. Specially, `rov_bringup` node subscribe `odom` topic and publish the TF relationship between `odom` and `base_footprint`
 
-### uvbot_cartographer
+### [uvbot_cartographer](/src/uvbot_cartographer/uvbot_cartographer.md)
 the launch and config file about cartographer slam for underwater vehicle 
 
 this ros package depends on `cartographer` `cartographer_ros` , we have include the part of code. 
@@ -45,69 +53,9 @@ colcon build --packages-up-to cartographer_ros
 - **cartographer_scan.launch.py** subscribe `/sonar/scan`
 - **cartographer_msis.launch.py** subscribe `/YellowBot/odometry/filtered` and `/sts1000_raw_points`
 
-## How to use (m750d slam)
-can use this in step one by one, or using our launch file.
-### Step One by One
-#### Step1: start m750d
-```
-ros2 launch oculus_ros2 default.launch.py 
-```
-should set the param `is_running` true, then m750d start working, publishing the topic `/sonar/ping`
-
-#### Step2: publish TF
-```
-ros2 launch rov_tf rov_tf.launch.py 
-```
-
-#### Step3: process /sonar/ping
-
-```
-ros2 run mbs m750d_ping_to_pointcloud 
-```
-which subscribe `/sonar/ping`, process and publishs the topic `/points`
+### [uvbot_navigation2](/src/uvbot_navigation2/uvbot_navigation2.md)
+Configure the Nav2 ROS package for underwater robots 
 
 
-#### Step4: start uv_cartographer
-```
-ros2 launch uvbot_cartographer cartographer.launch.py
-```
-
-### Launch
-#### online
-```
-ros2 launch uvbot_cartographer uvbot_cartographer_online.launch.py 
-```
-
-#### offline
-```
-ros2 launch uvbot_cartographer uvbot_cartographer_offline.launch.py 
-```
-and use the data in rosbag
-```
-source install/setup.bash
-ros2 bag play record/rosbag2_2024_05_17-15_37_22/rosbag2_2024_05_17-15_37_22_0.db3 
-```
-
-## Save Map
-```
-ros2 run nav2_map_server map_saver_cli -t map -f map_name
-```
-
-
-## How to use (msis slam)
-#### Step1: start msis sts1000
-```
-ros2 run msis sts1000_dc
-```
-should set the param `is_running` true, then m750d start working, publishing the topic `sts1000_raw` `sts1000_raw_points`
-
-#### Step2: publish TF
-```
-ros2 launch rov_tf rov_tf.launch.py 
-```
-
-#### Step3: start uv_cartographer
-```
-ros2 launch uvbot_cartographer cartographer_msis.launch.py
-```
-
+### [cirs_girona_cala_viuda](/src/cirs_girona_cala_viuda/cirs_girona_cala_viuda.md)
+This is a project form [UNDERWATER CAVES SONAR AND VISION DATA SET](https://cirs.udg.edu/caves-dataset/), I use the data from this project to validate the effectiveness of EKF.
