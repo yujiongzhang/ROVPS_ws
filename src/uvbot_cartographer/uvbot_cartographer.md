@@ -48,19 +48,24 @@ ros2 run nav2_map_server map_saver_cli -t map -f map_name
 ```
 
 
-## How to use (msis slam)
+## How to use msis slam online
 #### Step1: start msis sts1000
 ```
 ros2 run msis sts1000_dc
 ```
 should set the param `is_running` true, then m750d start working, publishing the topic `sts1000_raw` `sts1000_raw_points`
 
-#### Step2: publish TF
+#### Step2: publish TF ( If necessary )
 ```
 ros2 launch rov_tf rov_tf.launch.py 
 ```
 
-#### Step3: start uv_cartographer
+#### Step3: start EKF
+```
+
+```
+
+#### Step4: start uv_cartographer
 ```
 ros2 launch uvbot_cartographer cartographer_msis.launch.py
 ```
