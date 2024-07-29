@@ -33,9 +33,13 @@ ament_target_dependencies(rov_bringup rclcpp nav_msgs geometry_msgs tf2_msgs tf2
 add_executable(rov_bringup_cirs src/rov_bringup_cirs.cpp)
 ament_target_dependencies(rov_bringup_cirs rclcpp nav_msgs geometry_msgs tf2_msgs tf2_ros)
 
+add_executable(rov_bringup_2d src/rov_bringup_2d.cpp)
+ament_target_dependencies(rov_bringup_2d rclcpp nav_msgs geometry_msgs tf2_msgs tf2_ros)
+
 install(TARGETS
   rov_bringup
   rov_bringup_cirs
+  rov_bringup_2d
   DESTINATION lib/${PROJECT_NAME}
 )
 

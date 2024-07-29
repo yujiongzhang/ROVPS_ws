@@ -6,7 +6,6 @@
 
 #include <cmath>
 
-
 class sts1000_ping2pc : public rclcpp::Node
 {
 private:
@@ -21,12 +20,12 @@ public:
     sts1000_ping2pc(std::string name) : Node(name)
     {
         RCLCPP_INFO(this->get_logger(), "%s节点已经启动.", name.c_str());
-        // sts1000_ping_subscribe_ = this->create_subscription<sensor_msgs::msg::LaserScan>("/sts1000/ping", 10, \
-        //                             std::bind(&sts1000_ping2pc::sts1000_ping_callback, this, std::placeholders::_1));
-        // sts1000_pointcloud_publisher_ =  this->create_publisher<sensor_msgs::msg::PointCloud2>("/sts1000/edge_points", 10); 
-        sts1000_ping_subscribe_ = this->create_subscription<sensor_msgs::msg::LaserScan>("/sonar_micron_ros", 10, \
+        sts1000_ping_subscribe_ = this->create_subscription<sensor_msgs::msg::LaserScan>("/sts1000/ping", 10, \
                                     std::bind(&sts1000_ping2pc::sts1000_ping_callback, this, std::placeholders::_1));
-        sts1000_pointcloud_publisher_ =  this->create_publisher<sensor_msgs::msg::PointCloud2>("/sonar_micron_point", 10); 
+        sts1000_pointcloud_publisher_ =  this->create_publisher<sensor_msgs::msg::PointCloud2>("/sts1000/edge_points", 10); 
+        // sts1000_ping_subscribe_ = this->create_subscription<sensor_msgs::msg::LaserScan>("/sonar_micron_ros", 10, \
+        //                             std::bind(&sts1000_ping2pc::sts1000_ping_callback, this, std::placeholders::_1));
+        // sts1000_pointcloud_publisher_ =  this->create_publisher<sensor_msgs::msg::PointCloud2>("/sonar_micron_point", 10); 
         last_point = std::make_pair(-1,-1);
     }
 
@@ -47,7 +46,7 @@ public:
 
         for (int range_i = 0; range_i < n_ranges; range_i++)
         {
-            if ((msg->intensities)[range_i]>60) // 能量阈值设置
+            if ((msg->intensities)[range_i]>55) // 能量阈值设置
             {
                 double range = (msg->ranges)[range_i];
                 if ( range > 1.0)
@@ -64,7 +63,7 @@ public:
         if(cur_point.first != -1){//这次找到边缘点
             points_map.push_back(cur_point);
 
-            if(last_point.first != -1 && std::fabs(cur_point.first - last_point.first)<0.5 && std::fabs(cur_point.second - last_point.second)<0.5 ){//上次找到边缘点 并且满足要求
+            if(last_point.first != -1 && std::fabs(cur_point.first - last_point.first)<1 && std::fabs(cur_point.second - last_point.second)<1 ){//上次找到边缘点 并且满足要求
                 // 根据实际情况进行插值
                 double delta_len = std::sqrt(std::pow(last_point.first-cur_point.first,2) + std::pow(last_point.second-cur_point.second,2));
                 int n = static_cast<int>(delta_len / resolution) + 1;
@@ -123,9 +122,6 @@ public:
         }
 
         sts1000_pointcloud_publisher_->publish(pc2_msg);
-
-        
-
     }
 };
 

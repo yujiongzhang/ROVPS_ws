@@ -140,7 +140,7 @@ public:
                 // 创建消息
                 sensor_msgs::msg::LaserScan sts1000_ping;
                 sts1000_ping.header.stamp = rclcpp::Clock().now();
-                sts1000_ping.header.frame_id = "sts1000_link";
+                sts1000_ping.header.frame_id = "sts100_link";
                 sts1000_ping.angle_min = glb_nAngle /200.0 * 2* M_PI;//弧度
                 sts1000_ping.angle_max = glb_nAngle /200.0 * 2* M_PI;
                 sts1000_ping.angle_increment = 0.0;

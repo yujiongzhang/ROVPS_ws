@@ -10,9 +10,9 @@ options = {
   -- tracking_frame一般设置为发布频率最高的传感器的frame_id，cartographer将会把其他数据都转移到该坐标系下进行计算。
   -- 如果只使用雷达数据进行2D建图，那就只需要将其设置为雷达数据话题的frame_id，一般为laser。
   -- 如果使用雷达数据+IMU进行2D或者3D建图，因为IMU的发布频率明显高于雷达，所以需要设置为imu数据话题的frame_id，一般imu_link
-  tracking_frame = "base_footprint",
+  tracking_frame = "base_link",
   -- base_link改为odom,发布map到odom之间的位姿态
-  published_frame = "base_footprint",
+  published_frame = "odom",
   -- 不见得启用，只有在下一个选项provide_odom_frame为true时才启用，这个一般被设为odom，也是里程计的坐标系的名称。
   odom_frame = "odom",
   -- 用来指定是否由 Cartographer 来提供里程计坐标系。如果您没有其他外部设备或系统提供里程计数据，设置为 `true`；如果您已有里程计系统，设置为 `false`
