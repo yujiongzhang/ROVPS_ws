@@ -1,0 +1,15 @@
+/sts1000_dc:
+  ros__parameters:
+    diffusion: 5
+    energy_threshold: 100
+    is_running: false
+    qos_overrides:
+      /parameter_events:
+        publisher:
+          depth: 1000
+          durability: volatile
+          history: keep_last
+          reliability: reliable
+    scanRange: 15.0
+    startGain: 20
+    use_sim_time: false

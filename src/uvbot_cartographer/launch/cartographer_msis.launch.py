@@ -32,7 +32,7 @@ def generate_launch_description():
         name='cartographer_node',
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}],
-        remappings=[('/odom', '/YellowBot/odometry/filtered2d'),('/points2','/sts1000/edge_points'),('/imu','/YellowBot/imu')],
+        remappings=[('/odom', '/YellowBot/odometry/filtered'),('/points2','/sts1000/edge_points'),('/imu','/YellowBot/imu')],
         arguments=['-configuration_directory', configuration_directory,
                    '-configuration_basename', configuration_basename])
 

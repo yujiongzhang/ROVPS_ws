@@ -10,7 +10,7 @@ options = {
   -- tracking_frame一般设置为发布频率最高的传感器的frame_id，cartographer将会把其他数据都转移到该坐标系下进行计算。
   -- 如果只使用雷达数据进行2D建图，那就只需要将其设置为雷达数据话题的frame_id，一般为laser。
   -- 如果使用雷达数据+IMU进行2D或者3D建图，因为IMU的发布频率明显高于雷达，所以需要设置为imu数据话题的frame_id，一般imu_link
-  tracking_frame = "base_link",
+  tracking_frame = "imu_link",
   -- base_link改为odom,发布map到odom之间的位姿态
   published_frame = "odom",
   -- 不见得启用，只有在下一个选项provide_odom_frame为true时才启用，这个一般被设为odom，也是里程计的坐标系的名称。
@@ -80,9 +80,9 @@ TRAJECTORY_BUILDER_2D.submaps.grid_options_2d.resolution = 0.1
 
 
 -- 0.55改成0.65,Fast csm的最低分数，高于此分数才进行优化。
-POSE_GRAPH.constraint_builder.min_score = 0.65
+POSE_GRAPH.constraint_builder.min_score = 0.3
 --0.6改成0.7,全局定位最小分数，低于此分数则认为目前全局定位不准确
-POSE_GRAPH.constraint_builder.global_localization_min_score = 0.7
+POSE_GRAPH.constraint_builder.global_localization_min_score = 0.5
 
 
 
