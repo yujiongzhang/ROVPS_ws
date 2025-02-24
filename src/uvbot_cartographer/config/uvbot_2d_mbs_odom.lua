@@ -10,27 +10,27 @@ options = {
   -- tracking_frame一般设置为发布频率最高的传感器的frame_id，cartographer将会把其他数据都转移到该坐标系下进行计算。
   -- 如果只使用雷达数据进行2D建图，那就只需要将其设置为雷达数据话题的frame_id，一般为laser。
   -- 如果使用雷达数据+IMU进行2D或者3D建图，因为IMU的发布频率明显高于雷达，所以需要设置为imu数据话题的frame_id，一般imu_link
-  tracking_frame = "base_link",
+  tracking_frame = "imu_link",
   -- base_link改为odom,发布map到odom之间的位姿态
   published_frame = "base_link",
   -- 不见得启用，只有在下一个选项provide_odom_frame为true时才启用，这个一般被设为odom，也是里程计的坐标系的名称。
   odom_frame = "odom",
   -- 用来指定是否由 Cartographer 来提供里程计坐标系。如果您没有其他外部设备或系统提供里程计数据，设置为 `true`；如果您已有里程计系统，设置为 `false`
-  provide_odom_frame = true,
+  provide_odom_frame = false,
   -- false改为true，仅发布2D位资
   publish_frame_projected_to_2d = true,
   -- false改为true，使用里程计数据
-  use_odometry = false,
+  use_odometry = true,
   use_nav_sat = false,
   use_landmarks = false,
   -- 0改为1,使用一个雷达
-  num_laser_scans = 1,
+  num_laser_scans = 0,
   -- 1改为0，不使用多波雷达
   num_multi_echo_laser_scans = 0,
   -- 10改为1，1/1=1等于不分割
   num_subdivisions_per_laser_scan = 1,
   -- 订阅的点云topics的个数
-  num_point_clouds = 0,
+  num_point_clouds = 1,
   -- 使用tf2查找变换的超时秒数
   lookup_transform_timeout_sec = 0.2,
   -- 发布submap的周期间隔
@@ -66,7 +66,7 @@ TRAJECTORY_BUILDER_2D.max_range = 20
 -- TRAJECTORY_BUILDER_2D.missing_data_ray_length = 3.
 TRAJECTORY_BUILDER_2D.missing_data_ray_length = 11.5
 -- true改成false,不使用IMU数据，大家可以开启，然后对比下效果
-TRAJECTORY_BUILDER_2D.use_imu_data = false
+TRAJECTORY_BUILDER_2D.use_imu_data = true
 -- false改成true,使用实时回环检测来进行前端的扫描匹配
 TRAJECTORY_BUILDER_2D.use_online_correlative_scan_matching = true
 -- 1.0改成0.1,提高对运动的敏感度

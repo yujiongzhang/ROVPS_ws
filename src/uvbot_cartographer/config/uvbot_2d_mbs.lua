@@ -24,13 +24,13 @@ options = {
   use_nav_sat = false,
   use_landmarks = false,
   -- 0改为1,使用一个雷达
-  num_laser_scans = 1,
+  num_laser_scans = 0,
   -- 1改为0，不使用多波雷达
   num_multi_echo_laser_scans = 0,
   -- 10改为1，1/1=1等于不分割
   num_subdivisions_per_laser_scan = 1,
   -- 订阅的点云topics的个数
-  num_point_clouds = 0,
+  num_point_clouds = 1,
   -- 使用tf2查找变换的超时秒数
   lookup_transform_timeout_sec = 0.2,
   -- 发布submap的周期间隔

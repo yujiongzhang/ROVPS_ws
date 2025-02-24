@@ -31,7 +31,7 @@ public:
 
         m750d_ping_subscribe_ = this->create_subscription<oculus_interfaces::msg::Ping>("/sonar/ping", 10, \
                                     std::bind(&m750d_ping2pc::m750d_ping_callback, this, std::placeholders::_1));
-        m750d_pointcloud_publisher_ =  this->create_publisher<sensor_msgs::msg::PointCloud2>("/points2", 10); 
+        m750d_pointcloud_publisher_ =  this->create_publisher<sensor_msgs::msg::PointCloud2>("/sonar/points2", 10); 
         m750d_edge_pointcloud_publisher_ =  this->create_publisher<sensor_msgs::msg::PointCloud2>("/sonar/edge_points", 10); 
         // m750d_laserscan_publisher_ = this->create_publisher<sensor_msgs::msg::LaserScan>("/m750d/scan", 10);
     }
@@ -82,7 +82,7 @@ public:
 
         sensor_msgs::msg::PointCloud2 pc2_msg;
         pc2_msg.header = msg->header;
-        pc2_msg.header.frame_id = "laser_link";
+        pc2_msg.header.frame_id = "m750d_link";
         
         pc2_msg.height = 1;
         pc2_msg.width = points_map.size();
@@ -122,7 +122,7 @@ public:
 
         sensor_msgs::msg::PointCloud2 edge_pc2_msg;//边缘点
         edge_pc2_msg.header = msg->header;
-        edge_pc2_msg.header.frame_id = "laser_link";
+        edge_pc2_msg.header.frame_id = "m750d_link";
         
         edge_pc2_msg.height = 1;
         edge_pc2_msg.width = edge_points_map.size();
