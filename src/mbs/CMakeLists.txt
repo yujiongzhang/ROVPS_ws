@@ -67,10 +67,21 @@ ament_target_dependencies(
   OpenCV
 )
 
+add_executable(m750d_save_ping src/m750d_save_ping.cpp)
+ament_target_dependencies(
+  m750d_save_ping 
+  rclcpp 
+  sensor_msgs 
+  cv_bridge 
+  oculus_interfaces
+  OpenCV
+)
+
 install(TARGETS
   m750d_image_to_pointcloud
   m750d_ping_to_image
   m750d_ping_to_pointcloud
+  m750d_save_ping
   DESTINATION lib/${PROJECT_NAME}
 )
 
