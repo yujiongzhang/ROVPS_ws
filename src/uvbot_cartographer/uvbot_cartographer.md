@@ -9,9 +9,12 @@ ros2 launch oculus_ros2 default.launch.py
 should set the param `is_running` true, then m750d start working, publishing the topic `/sonar/ping`
 
 #### Step2: publish TF
+
 ```
 ros2 launch rov_tf rov_tf.launch.py 
 ```
+
+如果已经有了TF树，就不需要了.
 
 #### Step3: process /sonar/ping
 
@@ -19,7 +22,6 @@ ros2 launch rov_tf rov_tf.launch.py
 ros2 run mbs m750d_ping_to_pointcloud 
 ```
 which subscribe `/sonar/ping`, process and publishs the topic `/points`
-
 
 #### Step4: start uv_cartographer
 ```
