@@ -27,7 +27,7 @@ def generate_launch_description():
 
 
     cartographer_launch = ExecuteProcess(
-        cmd = ["ros2","launch","uvbot_cartographer","cartographer.launch.py"],
+        cmd = ["ros2","launch","uvbot_cartographer","cartographer_mbs.launch.py"],
         output = "screen"
     )
 

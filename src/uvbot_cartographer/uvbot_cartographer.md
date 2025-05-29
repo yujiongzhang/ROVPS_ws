@@ -21,7 +21,7 @@ ros2 launch rov_tf rov_tf.launch.py
 ```
 ros2 run mbs m750d_ping_to_pointcloud 
 ```
-which subscribe `/sonar/ping`, process and publishs the topic `/points`
+which subscribe `/sonar/ping`, process and publishs the topic `/sonar/edge_points`
 
 #### Step4: start uv_cartographer
 ```

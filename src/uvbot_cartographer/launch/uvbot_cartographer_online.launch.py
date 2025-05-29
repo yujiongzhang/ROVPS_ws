@@ -21,19 +21,19 @@ def generate_launch_description():
     )
 
     cartographer_launch = ExecuteProcess(
-        cmd = ["ros2","launch","uvbot_cartographer","cartographer.launch.py"],
+        cmd = ["ros2","launch","uvbot_cartographer","cartographer_mbs.launch.py"],
         output = "screen"
     )
 
-    rov_tf_launch = ExecuteProcess(
-        cmd = ["ros2","launch","rov_tf","rov_tf.launch.py" ],
-        output = "screen"
-    )
+    # rov_tf_launch = ExecuteProcess(
+    #     cmd = ["ros2","launch","rov_tf","rov_tf.launch.py" ],
+    #     output = "screen"
+    # )
 
     launchs = [
         oculus_driver_launch,
         cartographer_launch,
-        rov_tf_launch
+        # rov_tf_launch
     ]
 
     # 创建LaunchDescription对象launch_description,用于描述launch文件
